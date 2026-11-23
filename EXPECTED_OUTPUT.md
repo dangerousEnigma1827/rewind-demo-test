@@ -9,9 +9,9 @@ Rewind at commit `1c34e77` on Windows 11, Node.js v24.22.1, colour off (`NO_COLO
 | value | example from this session | on your machine |
 |---|---|---|
 | run ids | `da439bc4` (bad), `54d8285e` (good), `8ab832df` (nowatch), `4921524b` (fixed) | random each recording |
-| sequence numbers (`seq`) | the A-101 log line was `seq 258` | can shift by a few |
+| sequence numbers (`seq`) | the A-101 log line was `seq 258`; the crash was `seq 430` | shift between runs and machines (A-101 has also been `seq 256`; the crash `seq 429` and `seq 446`) |
 | millisecond timings | `235.9`, `401.6`, … | depend on the machine |
-| event counts | 432 events for the bad run | close to this, but not guaranteed (433 has been seen) |
+| event counts | 432 events for the bad run | vary between runs and machines (431, 432, 433 and 448 have been seen) |
 
 **These stay the same:** request numbering (#1 is the `GET /health` warm-up, then A-101 = #2, B-202 = #3,
 C-303 = #4), the totals, which request crashes, and what each finding says (apart from the `seq` numbers it cites).
