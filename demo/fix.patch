@@ -1,0 +1,44 @@
+diff --git a/demo/checkout.js b/demo/checkout.js
+index 9b915c9..a893041 100644
+--- a/demo/checkout.js
++++ b/demo/checkout.js
+@@ -3,14 +3,12 @@ const http = require('http');
+ const fs = require('fs');
+ const path = require('path');
+ 
+-let currentCart = null; // BUG: one cart shared by every in-flight request
+ 
+ function loadCart(order, done) {
+   fs.readFile(path.join(__dirname, 'prices.json'), 'utf8', (err, txt) => {
+     if (err) return done(err);
+     const prices = JSON.parse(txt);
+-    currentCart = { order: order.id, items: order.items.map(sku => ({ sku, price: prices[sku] })) };
+-    done();
++    done(null, { order: order.id, items: order.items.map(sku => ({ sku, price: prices[sku] })) });
+   });
+ }
+ 
+@@ -18,9 +16,9 @@ function chargePayment(order, done) {
+   setTimeout(function paymentConfirmed() { done(); }, order.paymentMs); // simulated payment gateway latency
+ }
+ 
+-function applyDiscount(order) {
++function applyDiscount(order, cart) {
+   let total = 0;
+-  for (let i = 0; i < order.items.length; i++) total += currentCart.items[i].price;
++  for (let i = 0; i < order.items.length; i++) total += cart.items[i].price;
+   return order.coupon ? Math.round(total * 0.9) : total;
+ }
+ 
+@@ -29,9 +27,9 @@ function handleOrder(req, res) {
+   req.on('data', c => (body += c));
+   req.on('end', () => {
+     const order = JSON.parse(body);
+-    loadCart(order, () => {
++    loadCart(order, (err, cart) => {
+       chargePayment(order, () => {
+-        const total = applyDiscount(order);
++        const total = applyDiscount(order, cart);
+         console.log(`order ${order.id}: charged $${total}`);
+         res.end(JSON.stringify({ id: order.id, total }));
+       });

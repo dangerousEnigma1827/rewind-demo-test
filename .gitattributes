@@ -1,0 +1,3 @@
+# demo/fix.patch must match demo/checkout.js byte for byte: keep both LF on every OS (core.autocrlf would otherwise make one CRLF)
+demo/checkout.js eol=lf
+demo/fix.patch eol=lf

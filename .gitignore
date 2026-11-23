@@ -1,0 +1,6 @@
+# Rewind writes its database and raw recordings here (REWIND_HOME defaults to ./.rewind)
+.rewind/
+
+# left behind if a patch is applied with --reject
+*.orig
+*.rej
